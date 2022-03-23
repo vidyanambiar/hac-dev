@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Text, TextVariants, Title } from '@patternfly/react-core';
 import classNames from 'classnames';
+import SimpleForm from '../../../components/SimpleForm/SimpleForm';
 import BreadCrumbs from '../breadcrumbs/BreadCrumbs';
 import './Page.scss';
-
 type PageProps = {
   breadcrumbs?: { path: string; name: string }[];
   className?: string;
@@ -26,6 +26,15 @@ const Page: React.FC<PageProps> = ({
   isSection,
   customButton = null,
 }) => {
+  // Toggle showing the simple form
+  const [isFormOpen, setIsFormOpen] = React.useState<boolean>(false);
+  const [formBtnLabel, setFormBtnLabel] = React.useState<string>('Show form');
+
+  const toggleFormDisplay = () => {
+    setIsFormOpen((prevState) => !prevState);
+    setFormBtnLabel(formBtnLabel === 'Show form' ? 'Hide form' : 'Show form');
+  };
+
   return (
     <div className="hacDev-page">
       <div className="hacDev-page__section">
@@ -51,6 +60,10 @@ const Page: React.FC<PageProps> = ({
         )}
       </div>
       <div className={classNames({ 'hacDev-page__section': isSection })}>{children}</div>
+      <div className="hacDev-page__section">
+        <button onClick={toggleFormDisplay}>{formBtnLabel}</button>
+        {isFormOpen && <SimpleForm />}
+      </div>
     </div>
   );
 };
