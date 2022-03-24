@@ -10,27 +10,44 @@ import {
 } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 
-type FormState = {
+type UserInfoState = {
   fullName: string;
   email: string;
   phone: string;
 };
 
+type ContactMethodState = {
+  byEmail: boolean;
+  byPhone: boolean;
+  doNotContact: boolean;
+};
+
 const SimpleForm: React.FC<{}> = () => {
   // Use React hook: useState
 
-  const [formState, setFormState] = React.useState<FormState>({
-    // Using objects in state
-    fullName: '',
-    email: '',
-    phone: '',
-  });
+  // Using objects in state
+  const [userInfoState, setUserInfoState] = React.useState<UserInfoState>({} as UserInfoState);
+
+  const [contactMethodState, setContactMethodState] = React.useState<ContactMethodState>(
+    {} as ContactMethodState,
+  );
 
   const handleTextInputChange = (value: string, e: React.FormEvent<HTMLInputElement>): void => {
     const { name } = e.currentTarget;
-    setFormState((prev) => ({
+    setUserInfoState((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleContactMethodChange = (
+    checked: boolean,
+    e: React.FormEvent<HTMLInputElement>,
+  ): void => {
+    const { id } = e.currentTarget;
+    setContactMethodState((prev) => ({
+      ...prev,
+      [id]: checked,
     }));
   };
 
@@ -87,7 +104,7 @@ const SimpleForm: React.FC<{}> = () => {
           id="simple-form-name-01"
           name="fullName"
           aria-describedby="simple-form-name-01-helper"
-          value={formState.fullName}
+          value={userInfoState.fullName}
           onChange={handleTextInputChange}
         />
       </FormGroup>
@@ -97,7 +114,7 @@ const SimpleForm: React.FC<{}> = () => {
           type="email"
           id="simple-form-email-01"
           name="email"
-          value={formState.email}
+          value={userInfoState.email}
           onChange={handleTextInputChange}
         />
       </FormGroup>
@@ -108,7 +125,7 @@ const SimpleForm: React.FC<{}> = () => {
           id="simple-form-number-01"
           placeholder="555-555-5555"
           name="phone"
-          value={formState.phone}
+          value={userInfoState.phone}
           onChange={handleTextInputChange}
         />
       </FormGroup>
@@ -118,12 +135,26 @@ const SimpleForm: React.FC<{}> = () => {
         label="How can we contact you?"
         isRequired
       >
-        <Checkbox label="Email" aria-label="Email" id="inlinecheck01" />
-        <Checkbox label="Phone" aria-label="Phone" id="inlinecheck02" />
+        <Checkbox
+          label="Email"
+          aria-label="Email"
+          id="byEmail"
+          isChecked={contactMethodState.byEmail}
+          onChange={handleContactMethodChange}
+        />
+        <Checkbox
+          label="Phone"
+          aria-label="Phone"
+          id="byPhone"
+          isChecked={contactMethodState.byPhone}
+          onChange={handleContactMethodChange}
+        />
         <Checkbox
           label="Please don't contact me."
           aria-label="Please don't contact me."
-          id="inlinecheck03"
+          id="doNotContact"
+          isChecked={contactMethodState.doNotContact}
+          onChange={handleContactMethodChange}
         />
       </FormGroup>
       <FormGroup label="Additional note" fieldId="simple-form-note-01">
