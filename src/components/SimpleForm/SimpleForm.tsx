@@ -10,21 +10,28 @@ import {
 } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 
+type FormState = {
+  fullName: string;
+  email: string;
+  phone: string;
+};
+
 const SimpleForm: React.FC<{}> = () => {
   // Use React hook: useState
 
-  const [value1, setValue1] = React.useState('');
-  const [value2, setValue2] = React.useState('');
-  const [value3, setValue3] = React.useState('');
+  const [formState, setFormState] = React.useState<FormState>({
+    // Using objects in state
+    fullName: '',
+    email: '',
+    phone: '',
+  });
 
-  const handleTextInputChange1 = () => {
-    setValue1(value1);
-  };
-  const handleTextInputChange2 = () => {
-    setValue2(value2);
-  };
-  const handleTextInputChange3 = () => {
-    setValue3(value3);
+  const handleTextInputChange = (value: string, e: React.FormEvent<HTMLInputElement>): void => {
+    const { name } = e.currentTarget;
+    setFormState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -78,10 +85,10 @@ const SimpleForm: React.FC<{}> = () => {
           isRequired
           type="text"
           id="simple-form-name-01"
-          name="simple-form-name-01"
+          name="fullName"
           aria-describedby="simple-form-name-01-helper"
-          value={value1}
-          onChange={handleTextInputChange1}
+          value={formState.fullName}
+          onChange={handleTextInputChange}
         />
       </FormGroup>
       <FormGroup label="Email" isRequired fieldId="simple-form-email-01">
@@ -89,9 +96,9 @@ const SimpleForm: React.FC<{}> = () => {
           isRequired
           type="email"
           id="simple-form-email-01"
-          name="simple-form-email-01"
-          value={value2}
-          onChange={handleTextInputChange2}
+          name="email"
+          value={formState.email}
+          onChange={handleTextInputChange}
         />
       </FormGroup>
       <FormGroup label="Phone number" isRequired fieldId="simple-form-number-01">
@@ -100,9 +107,9 @@ const SimpleForm: React.FC<{}> = () => {
           type="tel"
           id="simple-form-number-01"
           placeholder="555-555-5555"
-          name="simple-form-number-01"
-          value={value3}
-          onChange={handleTextInputChange3}
+          name="phone"
+          value={formState.phone}
+          onChange={handleTextInputChange}
         />
       </FormGroup>
       <FormGroup
