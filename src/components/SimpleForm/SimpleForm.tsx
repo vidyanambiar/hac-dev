@@ -9,6 +9,7 @@ import {
   Button,
 } from '@patternfly/react-core';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
+import './SimpleForm.scss';
 
 type UserInfoState = {
   fullName: string;
@@ -52,7 +53,7 @@ const SimpleForm: React.FC<{}> = () => {
   };
 
   return (
-    <Form isWidthLimited>
+    <Form className="hacDev-form-component">
       <FormGroup
         label="Full name"
         labelIcon={

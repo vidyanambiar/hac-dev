@@ -1,0 +1,7 @@
+.pf-c-form {
+  --hac-dev-c-form--m-limit-width--MaxWidth: 50%
+}
+
+.hacDev-form-component {
+  max-width: var(--hac-dev-c-form--m-limit-width--MaxWidth)
+}

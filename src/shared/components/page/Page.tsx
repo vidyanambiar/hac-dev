@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, TextVariants, Title } from '@patternfly/react-core';
+import { Text, TextVariants, Title, Button } from '@patternfly/react-core';
 import classNames from 'classnames';
 import SimpleForm from '../../../components/SimpleForm/SimpleForm';
 import BreadCrumbs from '../breadcrumbs/BreadCrumbs';
@@ -61,7 +61,9 @@ const Page: React.FC<PageProps> = ({
       </div>
       <div className={classNames({ 'hacDev-page__section': isSection })}>{children}</div>
       <div className="hacDev-page__section">
-        <button onClick={toggleFormDisplay}>{formBtnLabel}</button>
+        <Button className="hacDev-page__form-button" variant="primary" onClick={toggleFormDisplay}>
+          {formBtnLabel}
+        </Button>
         {isFormOpen && <SimpleForm />}
       </div>
     </div>

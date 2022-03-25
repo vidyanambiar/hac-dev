@@ -22,4 +22,12 @@
     margin-top: var(--pf-global--spacer--lg);
     margin-bottom: var(--pf-global--spacer--xl);
   }
+
+  .pf-c-button {
+    --hacDev-c-button--m-primary--Color: var(--pf-global--palette--orange-300)
+  }
+
+  &__form-button {
+    background-color: var(--hacDev-c-button--m-primary--Color)
+  }
 }
