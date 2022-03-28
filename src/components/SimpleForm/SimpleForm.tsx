@@ -2,19 +2,24 @@ import React from 'react';
 import {
   Form,
   FormGroup,
+  FormHelperText,
   TextInput,
   Checkbox,
   Popover,
   ActionGroup,
   Button,
 } from '@patternfly/react-core';
+import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import './SimpleForm.scss';
 
 type UserInfoState = {
   fullName: string;
   email: string;
-  phone: string;
+  phone: {
+    value: string;
+    validated: 'success' | 'warning' | 'error' | 'default';
+  };
 };
 
 type ContactMethodState = {
@@ -27,18 +32,40 @@ const SimpleForm: React.FC<{}> = () => {
   // Use React hook: useState
 
   // Using objects in state
-  const [userInfoState, setUserInfoState] = React.useState<UserInfoState>({} as UserInfoState);
+  const [userInfoState, setUserInfoState] = React.useState<UserInfoState>({
+    fullName: '',
+    email: '',
+    phone: {
+      value: '',
+      validated: 'default',
+    },
+  });
 
-  const [contactMethodState, setContactMethodState] = React.useState<ContactMethodState>(
-    {} as ContactMethodState,
-  );
+  const [contactMethodState, setContactMethodState] = React.useState<ContactMethodState>({
+    byEmail: false,
+    byPhone: false,
+    doNotContact: false,
+  });
 
   const handleTextInputChange = (value: string, e: React.FormEvent<HTMLInputElement>): void => {
     const { name } = e.currentTarget;
-    setUserInfoState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (name === 'phone') {
+      // Phone number validation
+      const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+      setUserInfoState((prev) => ({
+        ...prev,
+        phone: {
+          value,
+          validated: value === '' ? 'default' : phoneRegex.test(value) ? 'success' : 'error',
+        },
+      }));
+    } else {
+      setUserInfoState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleContactMethodChange = (
@@ -119,15 +146,31 @@ const SimpleForm: React.FC<{}> = () => {
           onChange={handleTextInputChange}
         />
       </FormGroup>
-      <FormGroup label="Phone number" isRequired fieldId="simple-form-number-01">
+      <FormGroup
+        label="Phone number"
+        isRequired
+        fieldId="simple-form-number-01"
+        helperText={
+          <FormHelperText
+            icon={<ExclamationCircleIcon />}
+            isHidden={userInfoState.phone.validated !== 'default'}
+          >
+            Please enter your phone number
+          </FormHelperText>
+        }
+        helperTextInvalid="Must be a valid phone number"
+        helperTextInvalidIcon={<ExclamationCircleIcon />}
+        validated={userInfoState.phone.validated}
+      >
         <TextInput
           isRequired
           type="tel"
           id="simple-form-number-01"
           placeholder="555-555-5555"
           name="phone"
-          value={userInfoState.phone}
+          value={userInfoState.phone.value}
           onChange={handleTextInputChange}
+          validated={userInfoState.phone.validated}
         />
       </FormGroup>
       <FormGroup
